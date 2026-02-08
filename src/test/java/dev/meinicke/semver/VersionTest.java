@@ -152,6 +152,7 @@ public class VersionTest {
     public void testInvalidEmptyPrerelease() {
         assertThrows(IllegalArgumentException.class, () -> Version.parse("1.0.0-"));
         assertThrows(IllegalArgumentException.class, () -> Version.parse("1.0.0-alpha..1"));
+        assertThrows(IllegalArgumentException.class, () -> Version.parse("1.2.3-alpha.-beta"));
     }
 
     @Test

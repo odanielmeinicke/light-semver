@@ -27,7 +27,29 @@ Key implementation notes:
 * Bump helpers: `bumpMajor()`, `bumpMinor()`, `bumpPatch()` that reset lower fields and drop prerelease/build.&#x20;
 * Canonical `toString()` is cached for fast repeated use.&#x20;
 
+# Installation 📦
+
+To use `light-semver` in your project, add the following to your `pom.xml`:
+
+```xml
+<repositories>
+  <repository>
+    <id>meinicke-releases</id>
+    <url>https://maven.meinicke.dev/repository/maven-releases/</url>
+  </repository>
+</repositories>
+```
+
+```xml
+<dependency>
+    <groupId>dev.meinicke</groupId>
+    <artifactId>light-semver</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 ---
+
 
 # Quick Start 🚦
 
@@ -195,15 +217,6 @@ If you add behavior, please add unit tests for:
 
 # Integration ideas & CI snippets 🔧
 
-## Using in Gradle/Maven (example coordinates — hypothetical)
-
-> If you publish to a Maven repository, you might use coordinates like:
-
-* `groupId`: `dev.meinicke`
-* `artifactId`: `light-semver`
-* `version`: `0.1.0`
-
-(Adjust to your actual publishing naming.)
 
 ## Example GitHub Actions step — bump patch on tag
 

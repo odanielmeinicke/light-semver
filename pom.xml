@@ -6,29 +6,198 @@
 
     <groupId>dev.meinicke</groupId>
     <artifactId>light-semver</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Light SemVer</name>
+    <description>A lightweight semantic versioning library for Java</description>
+    <url>https://github.com/odanielmeinicke/light-semver</url>
+
+    <licenses>
+        <license>
+            <name>Apache 2.0 License</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>meinicke</id>
+            <name>Daniel Meinicke</name>
+            <email>me@meinicke.dev</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/odanielmeinicke/light-semver.git</connection>
+        <developerConnection>scm:git:ssh://github.com:odanielmeinicke/light-semver.git</developerConnection>
+        <url>https://github.com/odanielmeinicke/light-semver/tree/main</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>meinicke-snapshots</id>
+            <url>https://maven.meinicke.dev/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>meinicke-releases</id>
+            <url>https://maven.meinicke.dev/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
-        <maven.compiler.source>9</maven.compiler.source>
-        <maven.compiler.target>9</maven.compiler.target>
+        <!-- Project Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Java Configuration -->
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <java.version>1.8</java.version>
+
+        <!-- Dependency Versions -->
+        <junit.version>5.11.0</junit.version>
+        <jetbrains.annotations.version>24.1.0</jetbrains.annotations.version>
+
+        <!-- Plugin Versions (Updated to Latest Stable) -->
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <maven.source.plugin.version>3.3.1</maven.source.plugin.version>
+        <maven.javadoc.plugin.version>3.7.0</maven.javadoc.plugin.version>
+        <maven.gpg.plugin.version>3.2.8</maven.gpg.plugin.version>
+        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
+        <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
+        <maven.clean.plugin.version>3.4.0</maven.clean.plugin.version>
+        <maven.install.plugin.version>3.1.2</maven.install.plugin.version>
     </properties>
 
     <dependencies>
+        <!-- JUnit 5 for Testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JetBrains Annotations (for IDE support) -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>24.0.1</version>
+            <version>${jetbrains.annotations.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.13.4</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <compilerArgs>
+                        <arg>-Xlint:unchecked</arg>
+                        <arg>-Xlint:deprecation</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!-- Maven JAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Build-Jdk>${java.version}</Build-Jdk>
+                            <Build-OS>${os.name}</Build-OS>
+                            <Automatic-Module-Name>dev.meinicke.semver</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Source Plugin - Generate source JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Maven Javadoc Plugin - Generate Javadoc JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <doclint>all,-missing</doclint>
+                    <quiet>true</quiet>
+                    <failOnError>false</failOnError>
+                    <links>
+                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
+                    </links>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Resources Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resources.plugin.version}</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Clean Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven.clean.plugin.version}</version>
+            </plugin>
+
+            <!-- Maven Install Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>${maven.install.plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
